@@ -123,13 +123,13 @@ spec:
           mountPath: /etc/nginx/nginx.conf
           subPath: nginx.conf
           readOnly: true
-    volumes:
-    - name: nginx-config
-      configMap:
-        name: frontend
-        items:
-        - key: nginx.conf
-          path: nginx.conf
+      volumes:
+      - name: nginx-config
+        configMap:
+          name: frontend
+          items:
+          - key: nginx.conf
+            path: nginx.conf
 
 ---
 apiVersion: v1
@@ -142,7 +142,7 @@ metadata:
     component: frontend
   namespace: expense
 spec:
-  type: loadBalancer #this will create a load balancer service and this will only work on cloud provider
+  type: LoadBalancer #this will create a load balancer service and this will only work on cloud provider
   selector:
     project: expense
     tier: web
