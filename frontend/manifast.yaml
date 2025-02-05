@@ -142,10 +142,12 @@ metadata:
     tier: web
     component: frontend
   namespace: expense
-  ports:
-  - port: 80 #port on which service will be exposed
-    targetPort: 8080 #port on which pod is running
+spec:
   selector:
     project: expense
     tier: web
     component: frontend
+  ports:
+  - port: 80 #port on which service will be exposed
+    targetPort: 8080 #port on which pod is running
+  

@@ -48,10 +48,12 @@ metadata:
     tier: app
     component: backend
   namespace: expense
-  ports:
-  - port: 8080
-    targetPort: 8080
+spec:
   selector:
     project: expense
     tier: app
     component: backend
+  ports:
+  - port: 8080
+    targetPort: 8080
+  

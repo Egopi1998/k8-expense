@@ -43,6 +43,11 @@ metadata:
     tier: db
     project: expense
     component: mysql
+spec:
+  selector:
+    tier: db
+    project: expense
+    component: mysql
   ports:
   - protocol: TCP
     port: 3306 
