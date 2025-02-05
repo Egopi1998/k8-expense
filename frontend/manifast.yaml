@@ -116,8 +116,8 @@ spec:
         component: frontend
     spec:
       containers:
-      - name: backend
-        image: nginx #will replace with our backend image
+      - name: frontend
+        image: gopi1998/frontend:v1.0 #will replace with our backend image
         volumeMounts:
         - name: nginx-config
           mountPath: /etc/nginx/nginx.conf

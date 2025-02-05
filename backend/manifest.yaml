@@ -31,7 +31,7 @@ spec:
     spec:
       containers:
       - name: backend
-        image: nginx #will replace with our backend image
+        image: gopi1998/backend:v1.0 #will replace with our backend image
         envFrom:
         - configMapRef:
             name: backend
