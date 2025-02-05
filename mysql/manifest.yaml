@@ -46,5 +46,6 @@ metadata:
     project: expense
     component: mysql
   ports:
-  - port: 3306 #port on which service will be exposed
-    targetPort: 3306 #port on which pod is running 
+  - protocol: TCP
+    port: 3306 
+    targetPort: 3306 
