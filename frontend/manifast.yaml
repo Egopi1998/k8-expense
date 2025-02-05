@@ -135,7 +135,6 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  type: loadBalancer #this will create a load balancer service and this will only work on cloud provider
   name: backend
   labels:
     project: expense
@@ -143,6 +142,7 @@ metadata:
     component: frontend
   namespace: expense
 spec:
+  type: loadBalancer #this will create a load balancer service and this will only work on cloud provider
   selector:
     project: expense
     tier: web
