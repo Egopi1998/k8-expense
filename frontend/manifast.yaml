@@ -85,7 +85,7 @@ data:
         }
 
         location /api/ { 
-            proxy_pass http://backend:8080/;
+            proxy_pass http://frontend:8080/;
         }
 
         }
@@ -117,7 +117,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: gopi1998/frontend:v1.0 #will replace with our backend image
+        image: gopi1998/frontend:v1.0 #will replace with our frontend image
         volumeMounts:
         - name: nginx-config
           mountPath: /etc/nginx/nginx.conf
