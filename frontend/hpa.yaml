@@ -17,3 +17,6 @@ spec:
       target:
         type: Utilization
         averageUtilization: 20
+# minikube addons enable metrics-server
+# kubectl get hpa -n expense
+# kubectl describe hpa frontend -n expense
