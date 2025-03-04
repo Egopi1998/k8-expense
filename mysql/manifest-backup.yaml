@@ -1,0 +1,53 @@
+
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: mysql
+  namespace: expense # this is the namespace where the deployment will be created
+  labels:
+    tier: db
+    project: expense
+    component: mysql
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      tier: db
+      project: expense
+      component: mysql
+  template:
+    metadata:
+      labels:
+        tier: db
+        project: expense
+        component: mysql
+    spec:
+      containers:
+      - name: mysql 
+        image: gopi1998/mysql:v1.0 #will replace with our mysql image
+        volumeMounts:
+        - name: mysql-persistent-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: ebs-dynamic-expense-claim
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: mysql
+  namespace: expense
+  labels:
+    tier: db
+    project: expense
+    component: mysql
+spec:
+  selector:
+    tier: db
+    project: expense
+    component: mysql
+  ports:
+  - protocol: TCP
+    port: 3306 
+    targetPort: 3306 

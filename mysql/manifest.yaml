@@ -1,39 +1,24 @@
+# Head less service for mysql
 apiVersion: v1
-kind: Namespace
-metadata:
-  name: expense
-  labels:
-    name: expense
-    environment: dev
-
----
-apiVersion: apps/v1 
-kind: Deployment
-metadata:
-  name: mysql
-  namespace: expense # this is the namespace where the deployment will be created
+kind: Service
+metadata: 
+  name: mysql-headless
+  namespace: expense
   labels:
     tier: db
     project: expense
     component: mysql
-spec:
-  replicas: 2
+  clusterIP: None # this is the headless service, used to allow direct access to the StatefulSet pods without load balancing, enabling each pod to be addressed individually.
   selector:
-    matchLabels:
-      tier: db
-      project: expense
-      component: mysql
-  template:
-    metadata:
-      labels:
-        tier: db
-        project: expense
-        component: mysql
-    spec:
-      containers:
-      - name: mysql 
-        image: gopi1998/mysql:v1.0 #will replace with our mysql image 
+    tier: db
+    project: expense
+    component: mysql
+  ports:
+  - protocol: TCP
+    port: 3306 
+    targetPort: 3306 
 ---
+# Service for mysql
 apiVersion: v1
 kind: Service
 metadata: 
@@ -52,3 +37,46 @@ spec:
   - protocol: TCP
     port: 3306 
     targetPort: 3306 
+---
+apiVersion: apps/v1 
+kind: StatefulSet
+metadata:
+  name: mysql
+  namespace: expense # this is the namespace where the deployment will be created
+  labels:
+    tier: db
+    project: expense
+    component: mysql
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      tier: db
+      project: expense
+      component: mysql
+  serviceName: mysql-headless # this is the name of the headless service
+  template:
+    metadata:
+      labels:
+        tier: db
+        project: expense
+        component: mysql
+    spec:
+      containers:
+      - name: mysql 
+        image: gopi1998/mysql:v1.0 # replace with our mysql image
+      nodeSelector:
+        topology.kubernetes.io/zone: us-east-1c # select the node in the same zone as the EBS volume
+        volumeMounts:
+        - name: mysql-persistent-storage
+          mountPath: /var/lib/mysql
+  volumeClaimTemplates:
+  - metadata:
+      name: mysql-persistent-storage
+    spec:
+      accessModes:
+      - ReadWriteOnce 
+      resources:
+        requests:
+          storage: 4Gi
+      storageClassName: "expense-ebs"
